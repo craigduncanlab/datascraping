@@ -1,7 +1,3 @@
-//Only use package reference if running from outside the folder
-//package s19007617;
-
-//import cits3001_2016s2.*;
 
 import java.util.*;
 import java.io.*;
