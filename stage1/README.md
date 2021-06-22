@@ -6,8 +6,9 @@ Ad hoc program (2018), scripted and run, to assist with transferring files from 
 
 EDOUtil was a control program that enabled choice of functions, broadly either:
 
-    (a) transferring files using the transfer program, and passing it a selected pre-processed file list;
-    (b) calling a utility function to use to select a sub-set of files to transfer.
+(a) transferring files using the transfer program, and passing it a selected pre-processed file list;
+
+(b) calling a utility function to use to select a sub-set of files to transfer.
 
 Usage (after compilation):
 
@@ -20,7 +21,7 @@ javac EDOUtil.java
 //3. Run
 java EDOUtil
 
-//3. repeat as necessary for workflow
+//4. repeat as necessary for workflow
 ```
 
 No CLI for parameters. Was prepared to run once.  
