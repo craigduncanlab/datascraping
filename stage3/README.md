@@ -1,23 +1,36 @@
-# Recap (of 2017 work, to see what might be useful to rework in future)
+# Process XML files (decision reports) and search for useful predefined content
+
+---
+Created: 2017
+
+Author: Craig Duncan
+
+Recap written: 22 June 2021
+
+---
 
 # Intro 
 
-This was a rather 'scripty' set of tools that followed this workflow:
+## Stage 2
 
-1. Took a directory of XML files (default Folder 'test', with subfolders) that had been created from PDF files (using a bulk PDF-> conversion from Adobe Acrobat).
-2. Processed the XML files into a simpler data format (succinct XML).
+Stage 2 took downloaded PDF files and identified where PDF files contained OCR and were searchable.
+The PDF files were converted to XML where OCR existed (it used Adobe Acrobat to creat XML files, in bulk, from OCR content).  
+
+The XML files were placed into the folder 'test' and this contained two folders, one for PDF with searchable (OCR) content, and the other for non-searchable content.
+
+## Stage 3
+
+This Stage 3 was a rather 'scripty' set of tools that was able to automate some preprocessing and then searches.  The workflow in the pipeline can be summarised as follows: 
+
+1. Take a directory of XML files (default Folder 'test', with subfolders) that had been created from PDF files.
+2. Process the XML files into a simpler data format (a succinct XML).
 3. Defined some standard regex queries that could be performed in a modular fashion.
 4. Passed the queries on to a specific search class that ran the queries on the succinct XML string data
 5. Iterated as required. 
 
-Fairly specific application: requires preliminary work to obtain the PDF files, convert to XML, then process.
-The PDF files themselves were from a particular source, and the hard-coded search queries were specific to that domain and the goals of the enquiries.
+Since the PDF files were from a particular source, hard-coded search queries were specific to that domain and the goals of the enquiries.
 
-Code originally written fairly quickly, and user-level functions and folder processing wrapped around a basic class.  Few software engineering or OOP ideas spplied.
-
-Pre-processing was done with Acrobat to convert to XML.  Consider low-level alternatives.
-
-# Instructions
+# Instructions for Stage 3
 
 Default:
 
@@ -52,7 +65,7 @@ Example :
 java EDOmain3 s xml 
 ```
 
-# Internals
+# Internals for Stage 3
 
 ## EDOmain3
 
@@ -62,15 +75,13 @@ The EDOmain3 creates runs XMLApp object, then runs extractPDFXML and XMLSearchAP
 
 ## extractPDFXML (which internally runs XMLSearchAPI).
 
-The main purpose of the extractPDFXML class is to write some standard queries and then invoke XMLSearchAPI:
+The main purpose of the extractPDFXML class was to write some standard queries and then invoke XMLSearchAPI:
 
-1. write the 'output.txt' file that contains structured information as a result of running simple NLP queries on each file.
+1. Write the 'output.txt' file that contains structured information as a result of running simple NLP queries on each file.
 
-*The queries are hard-coded regex expressions used subsequentially in the code, to navigate through file*.
+2. Write helper log files to cross-reference the fields written to output with success/failure for each file.
 
-*The queries reflect are based on 'expected' content of the Clearing memos/files, but contain regex patterns to allow for OCR errors, and inconsistencies in the human recording.*
-
-2. writes helper log files to cross-reference the fields written to output with success/failure for each file.
+The queries are hard-coded regex expressions used subsequentially in the code, to navigate through file.  They were written with knowledge of the 'expected' content of the Clearing memos/files, but contain regex patterns to allow for OCR errors, and inconsistencies or spelling errors made by the authors of the reports.
 
 ## XMLSearchAPI
 
