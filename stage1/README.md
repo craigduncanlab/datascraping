@@ -1,64 +1,114 @@
-# FTP Client-side File Utilities
-(c) 2018 Craig Duncan
+# Utility FTP File Transfers from predefined list
 
-Utility programs to assist with:
-- transferring files from an FTP server; and
-- perform data manipulation on some output text files.
+Ad hoc program (2018), scripted and run, to assist with transferring files from FTP server and performing some data manipulation on master file list.
 
-The workflow uses a main transfer program (EDOFiletransfers.java).  It is assisted by two other programs that prepare the file list for the main transfers. 
+# Usage
 
-The main application can be used to progress through the workflow in stages, using previous output.
+EDOUtil was a control program that enabled choice of functions, broadly either:
 
-1. EOUUtil is a control program that enables choice of functions, broadly either:
     (a) transferring files using the transfer program, and passing it a selected pre-processed file list;
     (b) calling a utility function to use to select a sub-set of files to transfer.
 
-2. EDOFiletransfers.java carries out the file transfers.  The transfers to be made are managed using a pre-processed file list.
+Usage (after compilation):
 
-3. EDOfileapp is the utility program containing functions that can perform some work on the file list that is used to manage the transfers
+```
+//1. Modify internal functions to be called in EDOUtil.java
 
+//2. Compile
+javac EDOUtil.java
 
-# Workflow: how the EDOUtil program can call the other programs in a sequence #
+//3. Run
+java EDOUtil
 
-1. Parse Lines CSV *Filter the FTP server full path information to retain only file names for workflow*
+//3. repeat as necessary for workflow
+```
 
-	Utility to fix and split out filenames from the FTP server file list
-        The input file has the full file path as generated from FTP server by the java app EDOclient.java
-        EDOfileApp myParsedFile = new EDOfileApp("fullpathsonly.txt");  
-        myParsedFile.parseLinesCSV("newfilenameset.txt"); 
-        
+No CLI for parameters. Was prepared to run once.  
 
-2. Parse Decision Reports *Filter the file list*
+# Helper classes
 
-	Utility to reduce the file list to only the 'decision reports' 
-        (already prepared with # delimiter)
-        EDOfileApp myParsedFile = new EDOfileApp("fullpathsonly.txt"); 
-        myParsedFile.parseDecisionReports("transferlist_DR.txt");
+EDOFiletransfers.java carries out the file transfers.  The transfers to be made are managed using a pre-processed file list.
 
-3.  Transfer from file list *Use the transfer list to request transfer of files*
+EDOfileAPP is the utility program containing functions that can perform some work on the file list that is used to manage the transfers
 
-	Conduct transfers from the prepared file list 
-        EDOfiletransfers myMover = new EDOfiletransfers();
-        myMover.transfer("transferlist.txt");
-        */
+# Sequential steps in workflow
 
-4.  Parse duplicates. *Filter the transfer list so that only the repeated filename 'decision report' is in it*
+The settings followed this workflow sequencesprogram can call the other programs in a sequence.
 
-     Utility to include only the 'decision report.pdf' duplicates in the file transfer list
-        EDOfileApp myParsedFile = new EDOfileApp("fullpathsonly.txt"); 
-        myParsedFile.parseDuplicates("transferlist_duplicates.txt");
-        */
+Precondition : a list of files that are to be transferred from FTP server.  The workflow includes modifying that file list as needed, to modify what files need to be transferred. 
 
-5.  Transfer the files that are in the duplicate reports list *Transfer the replicated files*
+## Filter the FTP server full path information to retain only file names for workflow
 
-     Conduct transfers from a file list of duplicate 'decision reports' 
-        EDOfiletransfers myMover = new EDOfiletransfers();
-        myMover.transferduplicates("transferlist_duplicates.txt");
-        */
+EDOfileApp function: Parse Lines CSV 
 
-6.  Include only the 'decision' files in the transfer list. *Filter so that only repeated 'decision.pdf' files are in the list.
+Utility to fix and split out filenames from the FTP server file list
+The input file has the full file path as generated from FTP server by the java app EDOclient.java
 
-     Utility to include only the 'decision.pdf' files/duplicates in the file transfer list 
-        EDOfileApp myParsedFile = new EDOfileApp("fullpathsonly.txt"); 
-        myParsedFile.parseDecisionPDF("transferlist_decision_dups.txt");
-   
+Usage:
+```
+EDOfileApp myParsedFile = new EDOfileApp("fullpathsonly.txt");  
+myParsedFile.parseLinesCSV("newfilenameset.txt"); 
+```
+
+## Filter the file list
+
+Utility to reduce the file list to only the 'decision reports' 
+(already prepared with # delimiter)
+
+EDOfileApp function: parseDecisionReport
+
+Usage:
+```
+EDOfileApp myParsedFile = new EDOfileApp("fullpathsonly.txt"); 
+myParsedFile.parseDecisionReports("transferlist_DR.txt");
+```
+
+## Use the transfer list to request transfer of files
+
+Conduct transfers from the prepared file list 
+
+EDOfiletransfers function: transfer
+
+Usage:
+
+```
+EDOfiletransfers myMover = new EDOfiletransfers();
+myMover.transfer("transferlist.txt");
+```
+
+## Filter the transfer list so that only the repeated filename 'decision report' is in it
+
+Utility to include only the 'decision report.pdf' duplicates in the file transfer list
+
+EDOfileApp function: parseDuplicates
+
+Usage:
+```
+EDOfileApp myParsedFile = new EDOfileApp("fullpathsonly.txt"); 
+myParsedFile.parseDuplicates("transferlist_duplicates.txt");
+```
+
+## Transfer the replicated files
+
+Conduct transfers from a file list of duplicate 'decision reports' 
+
+EDOfiletransfers function: transferduplicates
+
+Usage:
+```
+EDOfiletransfers myMover = new EDOfiletransfers();
+myMover.transferduplicates("transferlist_duplicates.txt");
+```
+
+## Filter so that only repeated 'decision.pdf' files are in the list
+
+Utility to include only the 'decision.pdf' files/duplicates in the file transfer list 
+
+EDOfileApp function: parseDecisionPDF
+
+Usage:
+```
+EDOfileApp myParsedFile = new EDOfileApp("fullpathsonly.txt"); 
+myParsedFile.parseDecisionPDF("transferlist_decision_dups.txt");
+```   
+
